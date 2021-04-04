@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetCoreRedis", "NetCoreRedis\NetCoreRedis.csproj", "{07949A75-28E4-40F2-B9FB-413AB6DA0E7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{07949A75-28E4-40F2-B9FB-413AB6DA0E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07949A75-28E4-40F2-B9FB-413AB6DA0E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07949A75-28E4-40F2-B9FB-413AB6DA0E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07949A75-28E4-40F2-B9FB-413AB6DA0E7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ED447C01-BDE8-471E-9523-C57B6F3A48F6}
+	EndGlobalSection
+EndGlobal
