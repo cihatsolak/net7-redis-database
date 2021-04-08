@@ -3,7 +3,8 @@
 namespace NetCoreRedis.Services.Redises
 {
     /// <summary>
-    /// Redis Server: IDistributedCache 
+    /// Redis Server: IDistributedCache
+    /// Nuget Package Manager: Microsoft.Extensions.Caching.StackExchangeRedis
     /// </summary>
     public interface IRedisDistributedService
     {
@@ -62,7 +63,7 @@ namespace NetCoreRedis.Services.Redises
         /// <param name="value">byte değer</param>
         /// <param name="absoluteExpirationMinute">cache süresi</param>
         /// <param name="slidingExpirationSecond">uzama süresi</param>
-        void FileCache(string key, byte[] value, int absoluteExpirationMinute = 0, int slidingExpirationSecond = 0);
+        void FileCache(string key, byte[] value, int absoluteExpirationMinute = 10, int slidingExpirationSecond  = 0);
 
         /// <summary>
         /// Dosya vb. redis cache (Asenkron)
@@ -71,6 +72,6 @@ namespace NetCoreRedis.Services.Redises
         /// <param name="value">byte değer</param>
         /// <param name="absoluteExpirationMinute">cache süresi</param>
         /// <param name="slidingExpirationSecond">uzama süresi</param>
-        Task FileCacheAsync(string key, byte[] value, int absoluteExpirationMinute = 0, int slidingExpirationSecond = 0);
+        Task FileCacheAsync(string key, byte[] value, int absoluteExpirationMinute = 10, int slidingExpirationSecond = 0);
     }
 }
