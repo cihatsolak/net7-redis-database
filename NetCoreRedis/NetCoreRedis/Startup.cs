@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using NetCoreRedis.Services;
 using NetCoreRedis.Services.Memories;
+using NetCoreRedis.Services.Redises;
 
 namespace NetCoreRedis
 {
@@ -14,7 +15,14 @@ namespace NetCoreRedis
             services.AddControllersWithViews();
             services.AddMemoryCache(); //InMemoryCache servisini kullanmak için
 
-            services.AddScoped<IMemoryService, MemoryManager>();
+            // IDistributedCache ayarlamasý
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+            });
+
+            services.AddSingleton<IMemoryService, MemoryManager>();
+            services.AddSingleton<IRedisDistributedService, RedisDistributedManager>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
