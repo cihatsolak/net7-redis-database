@@ -37,14 +37,14 @@ namespace NetCoreRedis
             #endregion
 
             #region StackExchange.Redis Konfigürasyonu
-            services.AddSingleton<RedisConfiguration>();
+            services.AddSingleton<IRedisStackExchangeAPI, RedisStackExchangeAPI>();
             services.Configure<RedisSettings>(Configuration.GetSection(nameof(RedisSettings)));
             #endregion
         }
 
-        public void Configure(IApplicationBuilder app, RedisConfiguration redisConfiguration)
+        public void Configure(IApplicationBuilder app, IRedisStackExchangeAPI redisStackExchangeAPI)
         {
-            redisConfiguration.ConnectServer();
+            redisStackExchangeAPI.ConnectServer();
 
             app.UseRouting();
 
