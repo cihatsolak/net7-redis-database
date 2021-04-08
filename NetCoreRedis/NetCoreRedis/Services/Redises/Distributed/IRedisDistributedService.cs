@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace NetCoreRedis.Services.Redises
+namespace NetCoreRedis.Services.Redises.Distributed
 {
     /// <summary>
     /// Redis Server: IDistributedCache
