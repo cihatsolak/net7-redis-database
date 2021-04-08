@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NetCoreRedis.Models;
-using NetCoreRedis.Services.Redises;
+using NetCoreRedis.Services.Redises.Distributed;
 using System;
 using System.IO;
 using System.Threading.Tasks;
