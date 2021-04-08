@@ -60,13 +60,17 @@ namespace NetCoreRedis.Services.Redises
         /// </summary>
         /// <param name="key">cachelenen ad</param>
         /// <param name="value">byte değer</param>
-        void FileCache(string key, byte[] value);
+        /// <param name="absoluteExpirationMinute">cache süresi</param>
+        /// <param name="slidingExpirationSecond">uzama süresi</param>
+        void FileCache(string key, byte[] value, int absoluteExpirationMinute = 0, int slidingExpirationSecond = 0);
 
         /// <summary>
         /// Dosya vb. redis cache (Asenkron)
         /// </summary>
         /// <param name="key">cachelenen ad</param>
         /// <param name="value">byte değer</param>
-        Task FileCacheAsync(string key, byte[] value);
+        /// <param name="absoluteExpirationMinute">cache süresi</param>
+        /// <param name="slidingExpirationSecond">uzama süresi</param>
+        Task FileCacheAsync(string key, byte[] value, int absoluteExpirationMinute = 0, int slidingExpirationSecond = 0);
     }
 }

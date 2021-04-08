@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
+using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace NetCoreRedis.Services.Redises
@@ -23,7 +25,14 @@ namespace NetCoreRedis.Services.Redises
         /// <returns></returns>
         public TEntity GetObject<TEntity>(string key)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            string cachedValue = _distributedCache.GetString(key);
+            if (string.IsNullOrEmpty(cachedValue))
+                return default;
+
+            return JsonSerializer.Deserialize<TEntity>(cachedValue);
         }
 
         /// <summary>
@@ -32,9 +41,16 @@ namespace NetCoreRedis.Services.Redises
         /// <typeparam name="TEntity">Veri tipi</typeparam>
         /// <param name="key">Cachelenilen ad</param>
         /// <returns></returns>
-        public Task<TEntity> GetObjectAsync<TEntity>(string key)
+        public async Task<TEntity> GetObjectAsync<TEntity>(string key)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            string cachedValue = await _distributedCache.GetStringAsync(key);
+            if (string.IsNullOrEmpty(cachedValue))
+                return default;
+
+            return JsonSerializer.Deserialize<TEntity>(cachedValue);
         }
 
         /// <summary>
@@ -47,7 +63,18 @@ namespace NetCoreRedis.Services.Redises
         /// <param name="slidingExpirationSecond">Uzama Süresi</param>
         public void SetObject<TEntity>(string key, TEntity value, int absoluteExpirationMinute = 1, int slidingExpirationSecond = 10)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            var distributedCacheEntryOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTime.Now.AddMinutes(absoluteExpirationMinute),
+                SlidingExpiration = TimeSpan.FromSeconds(slidingExpirationSecond)
+            };
+
+            var serilazedValue = JsonSerializer.Serialize(value);
+
+            _distributedCache.SetString(key, serilazedValue, distributedCacheEntryOptions);
         }
 
         /// <summary>
@@ -58,9 +85,20 @@ namespace NetCoreRedis.Services.Redises
         /// <param name="value">Değer</param>
         /// <param name="absoluteExpirationMinute">Süre</param>
         /// <param name="slidingExpirationSecond">Uzama Süresi</param>
-        public Task SetObjectAsync<TEntity>(string key, TEntity value, int absoluteExpirationMinute = 1, int slidingExpirationSecond = 10)
+        public async Task SetObjectAsync<TEntity>(string key, TEntity value, int absoluteExpirationMinute = 1, int slidingExpirationSecond = 10)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            var distributedCacheEntryOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTime.Now.AddMinutes(absoluteExpirationMinute),
+                SlidingExpiration = TimeSpan.FromSeconds(slidingExpirationSecond)
+            };
+
+            var serilazedValue = JsonSerializer.Serialize(value);
+
+            await _distributedCache.SetStringAsync(key, serilazedValue, distributedCacheEntryOptions);
         }
 
         /// <summary>
@@ -69,16 +107,22 @@ namespace NetCoreRedis.Services.Redises
         /// <param name="key">Cachelenen ad</param>
         public void Remove(string key)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            _distributedCache.Remove(key);
         }
 
         /// <summary>
         /// Silinecek cache adı (Asenkron)
         /// </summary>
         /// <param name="key">cachelenen ad</param>
-        public Task RemoveAsync(string key)
+        public async Task RemoveAsync(string key)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(nameof(key));
+
+            await _distributedCache.RemoveAsync(key);
         }
 
         /// <summary>
@@ -86,9 +130,23 @@ namespace NetCoreRedis.Services.Redises
         /// </summary>
         /// <param name="key">cachelenen ad</param>
         /// <param name="value">byte değer</param>
-        public void FileCache(string key, byte[] value)
+        /// <param name="absoluteExpirationMinute">cache süresi</param>
+        /// <param name="slidingExpirationSecond">uzama süresi</param>
+        public void FileCache(string key, byte[] value, int absoluteExpirationMinute = 0, int slidingExpirationSecond = 0)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            var distributedCacheEntryOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTime.Now.AddMinutes(absoluteExpirationMinute)
+            };
+
+            if (slidingExpirationSecond > 0)
+                distributedCacheEntryOptions.SlidingExpiration = TimeSpan.FromSeconds(slidingExpirationSecond);
+
+            //_distributedCache.Set(string key, byte[] value);
+            _distributedCache.Set(key, value, distributedCacheEntryOptions);
         }
 
         /// <summary>
@@ -96,9 +154,23 @@ namespace NetCoreRedis.Services.Redises
         /// </summary>
         /// <param name="key">cachelenen ad</param>
         /// <param name="value">byte değer</param>
-        public Task FileCacheAsync(string key, byte[] value)
+        /// <param name="absoluteExpirationMinute">cache süresi</param>
+        /// <param name="slidingExpirationSecond">uzama süresi</param>
+        public async Task FileCacheAsync(string key, byte[] value, int absoluteExpirationMinute = 0, int slidingExpirationSecond = 0)
         {
-            throw new System.NotImplementedException();
+            if (string.IsNullOrEmpty(key))
+                return;
+
+            var distributedCacheEntryOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTime.Now.AddMinutes(absoluteExpirationMinute)
+            };
+
+            if (slidingExpirationSecond > 0)
+                distributedCacheEntryOptions.SlidingExpiration = TimeSpan.FromSeconds(slidingExpirationSecond);
+
+            //_distributedCache.Set(string key, byte[] value);
+            await _distributedCache.SetAsync(key, value, distributedCacheEntryOptions);
         }
     }
 }
