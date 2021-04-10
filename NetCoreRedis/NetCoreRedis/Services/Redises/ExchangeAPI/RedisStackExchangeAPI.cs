@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using NetCoreRedis.Models.Settings;
 using StackExchange.Redis;
+using System;
 
 namespace NetCoreRedis.Services.Redises.ExchangeAPI
 {
@@ -23,8 +24,15 @@ namespace NetCoreRedis.Services.Redises.ExchangeAPI
         /// </summary>
         public async void ConnectServer()
         {
-            string serverAddress = string.Concat(_redisSettings.Host, ":", _redisSettings.Port);
-            _connectionMultiplexer = await ConnectionMultiplexer.ConnectAsync(serverAddress);
+            var configurationOptions = new ConfigurationOptions()
+            {
+                EndPoints = { string.Concat(_redisSettings.Host, ":", _redisSettings.Port) },
+                AbortOnConnectFail = _redisSettings.AbortOnConnectFail,
+                AsyncTimeout = _redisSettings.AsyncTimeOutMilliSecond,
+                ConnectTimeout = _redisSettings.ConnectTimeOutMilliSecond
+            };
+
+            _connectionMultiplexer = await ConnectionMultiplexer.ConnectAsync(configurationOptions);
         }
 
         /// <summary>
