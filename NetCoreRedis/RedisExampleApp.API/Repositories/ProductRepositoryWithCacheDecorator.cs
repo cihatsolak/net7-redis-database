@@ -1,5 +1,10 @@
 ﻿namespace RedisExampleApp.API.Repositories
 {
+    /// <summary>
+    /// DI Container'dan 
+    /// IProductRepository'i talep edersem --> ProductRepositoryWithCacheDecorator bu class'ı üretir.
+    /// ProductRepositoryWithCacheDecorator class içerisinde IProductRepository talep edersem  ProductRepository class'ını üretir.
+    /// </summary>
     public class ProductRepositoryWithCacheDecorator : IProductRepository
     {
         private const string productKey = "product-caches";

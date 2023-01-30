@@ -20,7 +20,20 @@ builder.Services.AddSingleton<IDatabase>(provider =>
     return redisService.GetDb(0);
 });
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductRepository>(provider =>
+{
+    var appDbContext = provider.GetRequiredService<AppDbContext>();
+    var redisService = provider.GetRequiredService<RedisService>();
+    var logger = provider.GetRequiredService<ILogger<ProductRepositoryWithLogDecorator>>();
+
+    var productRepository = new ProductRepository(appDbContext);
+    var productRepositoryWithCacheDecorator = new ProductRepositoryWithCacheDecorator(productRepository, redisService);
+    var productRepositoryWithLogDecorator = new ProductRepositoryWithLogDecorator(logger, productRepositoryWithCacheDecorator);
+
+    return productRepositoryWithLogDecorator;
+});
+
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
 
